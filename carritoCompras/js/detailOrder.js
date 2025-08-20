@@ -5,6 +5,7 @@ let resumenTotal = document.querySelector('.total');
 let destino = document.querySelector('.destino');
 let resumenDomicilio = document.querySelector('.valor-dom');
 
+
 document.addEventListener('DOMContentLoaded', () => {
     cargarProducto();
 });
@@ -42,47 +43,47 @@ let cargarProducto = () => {
         productos = Object.values(productosPrevios);
     }
      
-    productos.forEach((producto, i) => {
+    productos.forEach((dato, i) => {
         let fila = document.createElement('tr');
         fila.innerHTML = `
             <td class="product-block">
                 <a href="#" class="btn-eliminar"><i class="fa-solid fa-x"></i></a>
-                <img src="${producto.imagen}" alt="">
-                <a href="product-detail.html" class="h6">${producto.nombre}</a>
+                <img src="${dato.imagen}" alt="">
+                <a href="product-detail.html" class="h6">${dato.nombre}</a>
             </td>
             <td>
-                <p class="lead color-black">$${producto.precio}</p>
+                <p class="lead color-black">$${dato.precio}</p>
             </td>
             <td>
                 <div class="quantity quantity-wrap">
                     <div class="decrement"><i class="fa-solid fa-minus"></i></div>
-                    <input type="number" type ="text" name="quantity" value="${producto.cantidad || 1}" maxlength="2" size="1" class="number">
+                    <input type="text" name="quantity" value="1" maxlength="2" size="1" class="number">
                     <div class="increment"><i class="fa-solid fa-plus"></i></div>
                 </div>
             </td>
             <td>
-                <h6 class="total-pro">${producto.precio}</h6>
+                <h6 class="total-pro">${dato.precio}</h6>
             </td>
         `;
         listaCarrito.appendChild(fila);
         infoPedido(i);
-
-        resumenCompra();
-
     });
 
     // Asignar eventos a los botones eliminar
     let botonesEliminar = document.querySelectorAll('.btn-eliminar');
-    botonesEliminar.forEach((boton, pos) => {
+    botonesEliminar.forEach((boton, index) => {
         boton.addEventListener('click', (e) => {
-            borrarProducto(pos);
+            e.preventDefault();
+            eliminarProducto(index);
         });
     });
+
+    resumenCompra();
 }
 
-function borrarProducto(pos) {
+function eliminarProducto(index) {
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-    carrito.splice(pos, 1); // elimina el producto en esa posición
+    carrito.splice(index, 1); // elimina el producto en esa posición
     localStorage.setItem('carrito', JSON.stringify(carrito));
 
     // Recargar la tabla
@@ -91,41 +92,45 @@ function borrarProducto(pos) {
 }
 
 
+
 //funcion para el resumen de la compra
-/*
-function resumenCompra(){
+function resumenCompra() {
     let todosProductos = JSON.parse(localStorage.getItem('carrito')) || [];
-    let subtotal = 0;//acumula el subtotal de todos los productos
-    //recorrer cada producto y los acumulamos en el subtotal
+    let subtotal = 0; // acumula el subtotal de todos los productos
+    
+    // recorrer cada producto y acumular en el subtotal
     todosProductos.forEach(producto => {
         subtotal += producto.precio * (producto.cantidad || 1);
-    })
-    //calcular el domicilio
-    switch (destino.value) {
-        case "Medellín": default: domicilio; break;
-        case"Bello": domicilio = 10000; break;
-        case"Copacabana": domicilio= 20000; break;
-        case"Envigado": domicilio= 15000; break;
-        case"Itagüi": domicilio= 15000; break;
-        case"Sabaneta": domicilio= 15000; break;
-        case"La estrella": domicilio= 20000; break;
-        case"Caldas": domicilio= 20000; break; 
-    }
-    //calcular descuento del 10% si la compra es mayor a 100.000
+    });
+
+    // calcular descuento del 10% si la compra es mayor a 100.000
     let descuento = subtotal > 100000 ? subtotal * 0.1 : 0;
 
-    //calcular el total a pagar
+    // calcular el domicilio según el destino seleccionado
+    let domicilio = 0;
+    switch (destino.value) {
+        case "Medellin":default: domicilio; break;
+        case "Bello": domicilio = 10000; break;
+        case "Copacabana": domicilio = 20000; break;
+        case "Envigado": domicilio = 15000; break;
+        case "Itagüi": domicilio = 15000; break;
+        case "Sabaneta": domicilio = 15000; break;
+        case "La estrella": domicilio = 20000; break;
+        case "Caldas": domicilio = 20000; break;
+    }
+
+    // calcular el total a pagar
     let totalPagar = subtotal - descuento + domicilio;
 
-  
-
-    resumenSubTotal.textContent = `$${subtotal.toFixed(2)}`; 
-    resumenDescuento.textContent = descuento.toFixed(2); 
-    resumenTotal.textContent = totalPagar.toFixed(2); 
-    resumenDomicilio.textContent = domicilio.toFixed(2);
+    // Mostrar valores en el resumen
+    resumenSubTotal.textContent = `$${subtotal.toLocaleString()}`;
+    resumenDescuento.textContent = `-$${descuento.toLocaleString()}`;
+    resumenTotal.textContent = `$${totalPagar.toLocaleString()}`;
+    resumenDomicilio.textContent = `$${domicilio.toLocaleString()}`;
 }
 
-/* destino.addEventListener()('change', () => {
-    //actualiza el resumen
+// Evento para actualizar el resumen cuando cambie el destino
+destino.addEventListener('change', () => {
     resumenCompra();
-}); */
+});
+
