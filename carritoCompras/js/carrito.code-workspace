@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../../../../../../opt/lampp/htdocs/backend-apicrud"
+		},
+		{
+			"path": "../../frontend-apicrud2"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "carrito"
+	}
+}
