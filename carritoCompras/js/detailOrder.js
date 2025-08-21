@@ -3,7 +3,7 @@ let resumenSubTotal = document.querySelector('.sub-total');
 let resumenDescuento = document.querySelector('.promo');
 let resumenTotal = document.querySelector('.total');
 let destino = document.querySelector('.destino');
-let resumenDomicilio = document.querySelector('.valor-dom');
+let resumenDomicilio = document.querySelector('.valor-domi');
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -63,7 +63,7 @@ let cargarProducto = () => {
                     </div>
                 </td>
                 <td>
-                    <h6 class="total-pro">${producto.precio}</h6>
+                    <h6 class="total-pro">${producto.precio*producto.cantidad}</h6>
                 </td>
             `;
             listaCarrito.appendChild(fila);
