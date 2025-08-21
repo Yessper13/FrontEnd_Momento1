@@ -36,38 +36,48 @@ let infoPedido = (pos) => {
 }
 
 let cargarProducto = () => {
-    let productos = [];
+    let todosProductos = [];
     let productosPrevios = JSON.parse(localStorage.getItem('carrito'));
-    
     if (productosPrevios != null) {
-        productos = Object.values(productosPrevios);
+        todosProductos = Object.values(productosPrevios);
     }
-     
-    productos.forEach((dato, i) => {
-        let fila = document.createElement('tr');
-        fila.innerHTML = `
-            <td class="product-block">
-                <a href="#" class="btn-eliminar"><i class="fa-solid fa-x"></i></a>
-                <img src="${dato.imagen}" alt="">
-                <a href="product-detail.html" class="h6">${dato.nombre}</a>
-            </td>
-            <td>
-                <p class="lead color-black">$${dato.precio}</p>
-            </td>
-            <td>
-                <div class="quantity quantity-wrap">
-                    <div class="decrement"><i class="fa-solid fa-minus"></i></div>
-                    <input type="text" name="quantity" value="1" maxlength="2" size="1" class="number">
-                    <div class="increment"><i class="fa-solid fa-plus"></i></div>
-                </div>
-            </td>
-            <td>
-                <h6 class="total-pro">${dato.precio}</h6>
-            </td>
-        `;
-        listaCarrito.appendChild(fila);
-        infoPedido(i);
-    });
+     //comprobar si hay productos en el carrito
+    if (todosProductos.length != 0) {
+        listaCarrito.innerHTML = "";
+        todosProductos.forEach((producto, i) => {
+            let fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td class="product-block">
+                    <a href="#" class="btn-eliminar"><i class="fa-solid fa-x"></i></a>
+                    <img src="${producto.imagen}" alt="">
+                    <a href="product-detail.html" class="h6">${producto.nombre}</a>
+                </td>
+                <td>
+                    <p class="lead color-black">$${producto.precio}</p>
+                </td>
+                <td>
+                    <div class="quantity quantity-wrap">
+                        <div class="decrement" onclick="actualizarCantidad(${i},-1)"><i class="fa-solid fa-minus"></i></div>
+                        <input class="number" type="text" name="quantity" value="${producto.cantidad || 1}" maxlength="2" size="1" readonly>
+                        <div class="increment" onclick="actualizarCantidad(${i},1)"><i class="fa-solid fa-plus"></i></div>
+                    </div>
+                </td>
+                <td>
+                    <h6 class="total-pro">${producto.precio}</h6>
+                </td>
+            `;
+            listaCarrito.appendChild(fila);
+            infoPedido(i);
+        });
+    }else {
+    let fila = document.createElement('tr');
+    fila.innerHTML = `
+        <td colspan="4">
+            <p class="text-center fs-3">No hay productos en el carrito</p>
+        </td>
+    `;
+    listaCarrito.appendChild(fila);
+}
 
     // Asignar eventos a los botones eliminar
     let botonesEliminar = document.querySelectorAll('.btn-eliminar');
@@ -80,6 +90,31 @@ let cargarProducto = () => {
 
     resumenCompra();
 }
+
+ //funciones para actualizar la cantidad de productos
+function actualizarCantidad(pos,canbio){
+    let todosProductos = [];
+    let productosPrevios = JSON.parse(localStorage.getItem('carrito'));
+    if (productosPrevios != null) {
+        todosProductos = Object.values(productosPrevios);
+    }
+    if(todosProductos[pos]){
+        //actualizar cantidad
+        todosProductos[pos].cantidad = (todosProductos[pos].cantidad || 1) + canbio;
+        // evitar que la cantidad sea menor a 1
+        
+        if(todosProductos[pos].cantidad < 1) {
+            todosProductos[pos].cantidad = 1; 
+        }
+    }
+    // actualizar en localStorage
+    localStorage.setItem('carrito', JSON.stringify(todosProductos));
+    // recargar la tabla
+    cargarProducto();
+}
+
+
+
 
 function eliminarProducto(index) {
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];

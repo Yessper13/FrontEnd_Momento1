@@ -782,11 +782,27 @@ input[type=date], input[type=text], input[type=email], input[type=file], input[t
     border-radius: 10px;
     border: 2px solid black ;
 }
-.list-cart{
+.list-cart {
     position: absolute;
     top: 62px;
     right: 0;
-    width: 200px !important;
-    background-color: white /* rgba(107, 106, 106, 0.183) */;
+    width: 400px !important;   /* ahora más ancho */
+    background-color: white;
     display: none;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding-left: 27px;
+}
+
+.list-cart table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.list-cart th,
+.list-cart td {
+    font-size: 14px;
+    text-align: center;
+    padding: 6px;
+    word-wrap: break-word;
 }
