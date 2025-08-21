@@ -4,6 +4,7 @@ let resumenDescuento = document.querySelector('.promo');
 let resumenTotal = document.querySelector('.total');
 let destino = document.querySelector('.destino');
 let resumenDomicilio = document.querySelector('.valor-domi');
+let btnResumen = document.querySelector('.btn-resumen');
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -63,7 +64,7 @@ let cargarProducto = () => {
                     </div>
                 </td>
                 <td>
-                    <h6 class="total-pro">${producto.precio*producto.cantidad}</h6>
+                    <h6 class="total-pro">${producto.precio*(producto.cantidad|| 1)}</h6>
                 </td>
             `;
             listaCarrito.appendChild(fila);
@@ -169,3 +170,30 @@ destino.addEventListener('change', () => {
     resumenCompra();
 });
 
+//evento al boton pagar para guardar el resumen en localStorage
+
+
+btnResumen.addEventListener('click', () => {
+    //Extraer los productos del local
+     let productos = JSON.parse(localStorage.getItem('carrito')) || [];
+     let resumen = {
+        //copia de todos los productos
+       "productos" : productos,
+
+    }
+    //llenar la variable resumen con la informacion de la compra
+    resumen.subtotal = resumenSubTotal.textContent;
+    resumen.descuento = resumenDescuento.textContent;
+    resumen.destino = destino.value;
+    resumen.domicilio = resumenDomicilio.textContent;
+    resumen.totalPagar = resumenTotal.textContent;
+
+    //Guardar el resumen de la compra en el Local
+    // actualizar en localStorage
+    localStorage.setItem('pro-resumen', JSON.stringify(resumen));
+    // Redirigir a la página de checkout
+    window.location.href = 'checkout.html';
+    console.log(resumen);
+    //window.location.href = 'checkout.html';
+
+});

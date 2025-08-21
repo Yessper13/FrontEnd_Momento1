@@ -1,4 +1,4 @@
-
+    
 let contadorCarrito = document.querySelector(".contar-pro");
 let listadoCarrito = document.querySelector(".list-cart tbody");
 let contentProducts = document.querySelector('.content-pro');
