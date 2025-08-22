@@ -139,7 +139,7 @@ function resumenCompra() {
         subtotal += producto.precio * (producto.cantidad || 1);
     });
 
-    // calcular descuento del 10% si la compra es mayor a 100.000
+    // calcular descuento del 10% si la compra es mayor a 100000
     let descuento = subtotal > 100000 ? subtotal * 0.1 : 0;
 
     // calcular el domicilio según el destino seleccionado
